@@ -34,7 +34,8 @@ class Server:
         return ((page * page_size) - page_size, page * page_size)
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        '''takes two integer arguments page with default value 1 and page_size with default value 10'''
+        '''takes two integer arguments page with default value 1 and page_size
+        with default value 10'''
         assert isinstance(page, int) and page > 0
         assert isinstance(page_size, int) and page_size > 0
 
