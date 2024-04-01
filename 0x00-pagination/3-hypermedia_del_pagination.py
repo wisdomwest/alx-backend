@@ -55,7 +55,7 @@ class Server:
         for i in range(index, next_index):
             if self.indexed_dataset().get(i):
                 data.append(self.indexed_dataset()[i])
-            else: 
+            else:
                 next_index += 1
 
         return {
