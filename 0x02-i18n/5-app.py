@@ -59,7 +59,7 @@ babel.init_app(app, locale_selector=get_locale)
 @app.route('/', strict_slashes=False)
 def hello() -> str:
     """ Hello world """
-    return render_template('3-index.html')
+    return render_template('5-index.html')
 
 
 if __name__ == "__main__":
