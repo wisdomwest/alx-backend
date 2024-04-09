@@ -2,9 +2,9 @@
 
 """ Basic Flask app """
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, g
 from flask_babel import Babel
-
+from typing import Union, Dict
 
 class Config:
     """ Config class """
@@ -20,7 +20,7 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 
-@babel.localeselector
+#@babel.localeselector
 def get_locale() -> str:
     """ Get locale"""
     locale = request.args.get('locale', '').strip()
@@ -29,7 +29,33 @@ def get_locale() -> str:
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
-# babel.init_app(app, locale_selector=get_locale)
+users = {
+    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
+    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
+    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
+    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
+}
+
+
+def get_user(login_as) -> Union[Dict[str, Union[str, None]], None]:
+    """ Get user """
+    if login_as:
+        try:
+            return users[int(login_as)]
+        except Exception:
+            return None
+    return None
+
+
+@app.before_request
+def before_request():
+    """ Before request """
+    g.user = get_user(request.args.get('login_as'))
+
+
+babel.init_app(app, locale_selector=get_locale)
+
+
 @app.route('/', strict_slashes=False)
 def hello() -> str:
     """ Hello world """
