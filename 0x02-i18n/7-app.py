@@ -4,10 +4,10 @@
 """ Basic Flask app """
 
 from flask import Flask, render_template, request, g
-from flask_babel import Babel
+from flask_babel import Babel, format_datetime
 from typing import Union, Dict
 import pytz
-
+import datetime
 
 class Config:
     """ Config class """
@@ -62,16 +62,16 @@ def get_timezone() -> str:
     if not t_zone and g.user:
         t_zone = g.user['timezone']
     try:
-        return pytz.timezone(t_zone).zone
+        t_zone = pytz.timezone(t_zone).zone
     except pytz.exceptions.UnknownTimeZoneError:
-        return app.config['BABEL_DEFAULT_TIMEZONE']
+        t_zone = app.config['BABEL_DEFAULT_TIMEZONE']
 
 
 @app.before_request
 def before_request():
     """ Before request """
     g.user = get_user(request.args.get('login_as'))
-
+    g.time = format_datetime(datetime.datetime.now()))
 
 # babel.init_app(app, locale_selector=get_locale)
 
@@ -79,7 +79,7 @@ def before_request():
 @app.route('/', strict_slashes=False)
 def hello() -> str:
     """ Hello world """
-    return render_template('6-index.html')
+    return render_template('index.html')
 
 
 if __name__ == "__main__":
