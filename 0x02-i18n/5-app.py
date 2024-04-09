@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, g
 from flask_babel import Babel
 from typing import Union, Dict
 
+
 class Config:
     """ Config class """
     LANGUAGES = ["en", "fr"]
@@ -20,7 +21,7 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 
-#@babel.localeselector
+@babel.localeselector
 def get_locale() -> str:
     """ Get locale"""
     locale = request.args.get('locale', '').strip()
@@ -53,7 +54,7 @@ def before_request():
     g.user = get_user(request.args.get('login_as'))
 
 
-babel.init_app(app, locale_selector=get_locale)
+# babel.init_app(app, locale_selector=get_locale)
 
 
 @app.route('/', strict_slashes=False)
